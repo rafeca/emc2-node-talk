@@ -1,0 +1,33 @@
+
+script(type='text/javascript')
+
+  $(document).ready(function(){
+
+    var socket = io.connect('/room?id=4');
+    
+    var renderMessage = function(message) {
+      $('#activity').append('<p><strong>' + message.clientId + '</strong>' + message.message + '</p>');
+    };
+    
+    $('form').submit(function(evt){
+      evt.preventDefault();
+      var message = $('input[name=message]').val();
+      
+      socket.emit('message', message, function(message) {
+        renderMessage(message);
+      });
+    });
+    
+    socket.on('message', function(message) {
+      renderMessage(message);
+    });
+  });
+
+h1= title
+p Welcome to #{title}
+
+div#activity
+
+form
+  input(type='text', name='message')
+  input(type='submit', value='Send!')
